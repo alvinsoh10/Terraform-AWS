@@ -6,7 +6,8 @@ pipeline {
             steps{
                 script{
                     dir('terraform'){
-                        git clone "https://github.com/alvinsoh10/Terraform-AWS.git"
+                        git url: "https://github.com/alvinsoh10/Terraform-AWS.git"
+                        sh "git checkout main"
                     }
                 }
             }
