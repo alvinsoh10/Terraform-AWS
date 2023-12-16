@@ -6,7 +6,7 @@ pipeline {
             steps{
                 script{
                     dir('terraform'){
-                        git "https://github.com/alvinsoh10/Terraform-AWS.git"
+                        git clone "https://github.com/alvinsoh10/Terraform-AWS.git"
                     }
                 }
             }
