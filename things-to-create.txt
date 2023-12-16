@@ -1,0 +1,3 @@
+NLB to access SFTP
+fsx to ec2 for drive path
+ad and auto scaling
