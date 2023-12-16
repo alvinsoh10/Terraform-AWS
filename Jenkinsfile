@@ -5,7 +5,9 @@ pipeline {
         stage ('Checkout'){
             steps{
                 script{
-                    dir('terraform')
+                    dir('terraform'){
+                        git "https://github.com/alvinsoh10/Terraform-AWS.git"
+                    }
                 }
             }
         }
