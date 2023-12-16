@@ -1,4 +1,4 @@
-resource "aws_subnet" "public_1"{
+resource "aws_subnet" "public_1a"{
     vpc_id = aws_vpc.main.id
     cidr_block = "10.10.0.0/26"
     availability_zone = "ap-southeast-1a"
@@ -10,7 +10,7 @@ resource "aws_subnet" "public_1"{
     }
 }
 
-resource "aws_subnet" "public_2"{
+resource "aws_subnet" "public_1b"{
     vpc_id = aws_vpc.main.id
     cidr_block = "10.10.0.64/26"
     availability_zone = "ap-southeast-1b"
@@ -22,7 +22,7 @@ resource "aws_subnet" "public_2"{
     }
 }
 
-resource "aws_subnet" "private_1"{
+resource "aws_subnet" "private_1a"{
     vpc_id = aws_vpc.main.id
     cidr_block = "10.10.0.128/26"
     availability_zone = "ap-southeast-1a"
@@ -33,7 +33,7 @@ resource "aws_subnet" "private_1"{
     }
 }
 
-resource "aws_subnet" "private_2"{
+resource "aws_subnet" "private_1b"{
     vpc_id = aws_vpc.main.id
     cidr_block = "10.10.0.192/26"
     availability_zone = "ap-southeast-1b"
