@@ -2,6 +2,11 @@ pipeline {
 
     agent any
      stages {
+        stage ('Checkout'){
+            script{
+                dir('terraform')
+            }
+        }
         stage('Plan'){
             steps{
                 sh 'pwd;cd terraform/ ; terraform init'
