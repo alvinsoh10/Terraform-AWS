@@ -3,8 +3,10 @@ pipeline {
     agent any
      stages {
         stage ('Checkout'){
-            script{
-                dir('terraform')
+            steps{
+                script{
+                    dir('terraform')
+                }
             }
         }
         stage('Plan'){
