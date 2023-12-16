@@ -1,6 +1,6 @@
 resource "aws_vpc" "main"{
     #CIDR block for VPC
-    cidr_block = "10.0.0.0/24"
+    cidr_block = "10.10.0.0/24"
     
     instance_tenancy = "default"
 
@@ -10,7 +10,7 @@ resource "aws_vpc" "main"{
     assign_generated_ipv6_cidr_block = false
 
     tags = {
-        Name = "main"
+        Name = "alvin-TF"
     }
 }
 
