@@ -1,7 +1,4 @@
 pipeline {
-    parameters{
-
-    }
 
     agent any
      stages {
