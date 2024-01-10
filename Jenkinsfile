@@ -8,6 +8,7 @@ pipeline {
                     dir('terraform'){
                         sh("git clone --depth 1 --no-checkout https://github.com/alvinsoh10/Terraform-AWS.git")
                         sh 'pwd; cd Terraform-AWS'
+                        sh 'git space-checkout init --cone'
                         sh 'git sparse-checkout set Terraform'
                         sh 'git checkout'
 
