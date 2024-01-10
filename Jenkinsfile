@@ -6,7 +6,7 @@ pipeline {
             steps{
                 script{
                     dir('terraform'){
-                        sh("git archive --remote=https://github.com/alvinsoh10/Terraform-AWS.git master Terraform| tar x")
+                        sh("git archive --remote=https://github.com/alvinsoh10/Terraform-AWS.git master Terraform")
                         
                     }
                 }
