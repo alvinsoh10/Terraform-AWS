@@ -6,9 +6,8 @@ pipeline {
             steps{
                 script{
                     dir('terraform'){
-                        git url: "https://github.com/alvinsoh10/Terraform-AWS.git", branch:"main"
-                        git sparse-checkout init --cone
-                        git sparse-checkout set Terraform
+                        sh("git archive --remote=https://github.com/alvinsoh10/Terraform-AWS.git master Terraform| tar x")
+                        
                     }
                 }
             }
