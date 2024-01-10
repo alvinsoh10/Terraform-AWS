@@ -6,8 +6,11 @@ pipeline {
             steps{
                 script{
                     dir('terraform'){
-                        sh("git archive --remote=https://github.com/alvinsoh10/Terraform-AWS.git master Terraform")
-                        
+                        sh("git clone --depth 1 --no-checkout https://github.com/alvinsoh10/Terraform-AWS.git")
+                        sh 'pwd; cd Terraform-AWS'
+                        sh 'git sparse-checkout set Terraform'
+                        sh 'git checkout'
+
                     }
                 }
             }
