@@ -18,6 +18,9 @@ managedNodeGroups:
     desiredCapacity: 1
     volumeSize: 20
     labels: {role: worker}
+    subnets:
+      - subnet-0464b6da25430cbb0
+      - subnet-02b71baaa20b4cadf
     tags:
       nodegroup-role: worker
     iam:
