@@ -17,6 +17,7 @@ managedNodeGroups:
     maxSize: 1
     desiredCapacity: 1
     volumeSize: 20
+    privateNetworking: true
     labels: {role: worker}
     subnets:
       - subnet-0464b6da25430cbb0
