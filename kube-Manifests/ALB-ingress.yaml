@@ -1,0 +1,178 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/name: aws-load-balancer-controller
+  name: aws-load-balancer-controller
+  namespace: kube-system # Or your desired namespace
+  annotations:
+    # If using IRSA, replace with your IAM Role ARN
+    # eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/aws-load-balancer-controller-role
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/name: aws-load-balancer-controller
+  name: aws-load-balancer-controller
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - services
+      - pods
+      - nodes
+      - namespaces
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - serviceaccounts
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses
+      - ingresses/status
+      - ingressclasses
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - elbv2.k8s.aws
+    resources:
+      - targetgroupbindings
+      - targetgroupbindings/status
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - update
+      - watch
+      - patch
+  - apiGroups:
+      - elbv2.k8s.aws
+    resources:
+      - ingressclassparams
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/name: aws-load-balancer-controller
+  name: aws-load-balancer-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: aws-load-balancer-controller
+subjects:
+  - kind: ServiceAccount
+    name: aws-load-balancer-controller
+    namespace: kube-system # Must match the ServiceAccount namespace
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/name: aws-load-balancer-controller
+  name: aws-load-balancer-controller
+  namespace: kube-system # Must match the ServiceAccount namespace
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: controller
+      app.kubernetes.io/name: aws-load-balancer-controller
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: controller
+        app.kubernetes.io/name: aws-load-balancer-controller
+    spec:
+      containers:
+        - args:
+            - --cluster-name=test-eks # IMPORTANT: Replace with your EKS cluster name
+            - --aws-region=ap-southeast-1 # IMPORTANT: Replace with your AWS region (e.g., us-east-1)
+            - --aws-vpc-id=your-vpc-id # Optional: Specify if controller is not in the same VPC as cluster
+            - --enable-endpoint-slices=true # Recommended for Kubernetes 1.21+
+            - --enable-ingress-class-params=true # Enable IngressClassParams CRD usage
+          image: public.ecr.aws/eks/aws-load-balancer-controller:v2.5.4 # Use the latest stable version
+          name: controller
+          ports:
+            - containerPort: 80
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+      serviceAccountName: aws-load-balancer-controller
+      # nodeSelector: # Optional: If you want to run the controller on specific nodes
+      #   kubernetes.io/os: linux
+      #   kubernetes.io/arch: amd64
