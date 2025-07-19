@@ -11,5 +11,5 @@ resource "aws_route53_record" "postgresdb" {
   name    = "db.alvin.com"
   type    = "CNAME"
   ttl     = "30"
-  records = [aws_db_instance.default.endpoint]
+  records = [aws_db_instance.default.address]
 }
